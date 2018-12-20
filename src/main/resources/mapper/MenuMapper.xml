@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.my.fate.dao.MenuDao" >
+
+    <resultMap id="menuMap" type="Menu" >
+        <id column="menu_id" property="menuId" jdbcType="INTEGER" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+        <result column="path" property="path" jdbcType="VARCHAR" />
+        <result column="component" property="component" jdbcType="VARCHAR" />
+        <result column="iconCls" property="iconcls" jdbcType="VARCHAR" />
+        <result column="keepAlive" property="keepalive" jdbcType="BIT" />
+        <result column="requireAuth" property="requireauth" jdbcType="BIT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <resultMap id="menuAndRoleMap" type="Menu" extends="menuMap">
+        <collection column="menu_id" property="roleList" ofType="com.my.fate.model.Role"
+                    select="com.my.fate.dao.RoleDao.selectRolesByMenuId">
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        menu_id, url, parent_id, path, component, iconCls, keepAlive, requireAuth, create_time, 
+        update_time
+    </sql>
+
+    <select id="listAll" resultMap="menuAndRoleMap">
+        select
+        <include refid="Base_Column_List" />
+        from
+        menu
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="menuMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from menu
+        where menu_id = #{menuId,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insert" parameterType="Menu" >
+        insert into menu (menu_id, url, parent_id, 
+            path, component, iconCls, 
+            keepAlive, requireAuth, create_time, 
+            update_time)
+        values (#{menuId,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, 
+            #{path,jdbcType=VARCHAR}, #{component,jdbcType=VARCHAR}, #{iconcls,jdbcType=VARCHAR}, 
+            #{keepalive,jdbcType=BIT}, #{requireauth,jdbcType=BIT}, now(), now())
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="Menu" >
+        update menu
+        set url = #{url,jdbcType=VARCHAR},
+            parent_id = #{parentId,jdbcType=INTEGER},
+            path = #{path,jdbcType=VARCHAR},
+            component = #{component,jdbcType=VARCHAR},
+            iconCls = #{iconcls,jdbcType=VARCHAR},
+            keepAlive = #{keepalive,jdbcType=BIT},
+            requireAuth = #{requireauth,jdbcType=BIT},
+            update_time =  now()
+        where menu_id = #{menuId,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from menu
+        where menu_id = #{menuId,jdbcType=INTEGER}
+    </delete>
+</mapper>

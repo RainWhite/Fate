@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.my.fate.dao.RoleDao" >
+
+    <resultMap id="roleMap" type="Role" >
+        <id column="role_id" property="roleId" jdbcType="INTEGER" />
+        <result column="role_name_EN" property="roleNameEn" jdbcType="VARCHAR" />
+        <result column="role_name_ZH" property="roleNameZh" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        role_id, role_name_EN, role_name_ZH, create_time, update_time
+    </sql>
+
+    <select id="listAll" resultMap="roleMap">
+        select
+        <include refid="Base_Column_List" />
+        from
+        role
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="roleMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from role
+        where role_id = #{roleId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectRolesByUserId" resultMap="roleMap" parameterType="java.lang.String" >
+        select
+        r.role_id, r.role_name_EN, r.role_name_ZH, r.create_time, r.update_time
+        from role r , user_role ur
+        where ur.user_id = #{userId}
+              and r.role_id = ur.role_id
+    </select>
+
+    <select id="selectRolesByMenuId" resultMap="roleMap" parameterType="java.lang.Integer" >
+        select
+        r.role_id, r.role_name_EN, r.role_name_ZH, r.create_time, r.update_time
+        from role r , menu_role mr
+        where mr.menu_id = #{menuId}
+              and r.role_id = mr.role_id
+    </select>
+
+    <insert id="insert" parameterType="Role" >
+        insert into role (role_id, role_name_EN, role_name_ZH, create_time, update_time
+            )
+        values (#{roleId,jdbcType=INTEGER}, #{roleNameEn,jdbcType=VARCHAR}, #{roleNameZh,jdbcType=VARCHAR},
+                now(), now()
+            )
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="Role" >
+        update role
+        set role_name_EN = #{roleNameEn,jdbcType=VARCHAR},
+            role_name_ZH = #{roleNameZh,jdbcType=VARCHAR},
+            update_time = now()
+        where role_id = #{roleId,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from role
+        where role_id = #{roleId,jdbcType=INTEGER}
+    </delete>
+</mapper>

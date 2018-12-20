@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.my.fate.dao.UserInfoDao" >
+
+    <resultMap id="userInfoMap" type="UserInfo" >
+        <id column="user_id" property="userId" jdbcType="CHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="gender" property="gender" jdbcType="INTEGER" />
+        <result column="birth" property="birth" jdbcType="DATE" />
+        <result column="age" property="age" jdbcType="INTEGER" />
+        <result column="zodiac" property="zodiac" jdbcType="INTEGER" />
+        <result column="height" property="height" jdbcType="INTEGER" />
+        <result column="weight" property="weight" jdbcType="VARCHAR" />
+        <result column="hometown" property="hometown" jdbcType="VARCHAR" />
+        <result column="education" property="education" jdbcType="VARCHAR" />
+        <result column="bachelor_school" property="bachelorSchool" jdbcType="VARCHAR" />
+        <result column="master_school" property="masterSchool" jdbcType="VARCHAR" />
+        <result column="doctor_school" property="doctorSchool" jdbcType="VARCHAR" />
+        <result column="income" property="income" jdbcType="INTEGER" />
+        <result column="occupation" property="occupation" jdbcType="INTEGER" />
+        <result column="workplace" property="workplace" jdbcType="VARCHAR" />
+        <result column="habit" property="habit" jdbcType="VARCHAR" />
+        <result column="photo" property="photo" jdbcType="VARCHAR" />
+        <result column="voice" property="voice" jdbcType="LONGVARBINARY" />
+        <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+        <result column="fall_in_love" property="fallInLove" jdbcType="INTEGER" />
+        <result column="married" property="married" jdbcType="INTEGER" />
+        <result column="is_enabled" property="isEnabled" jdbcType="BIT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        user_id, user_name, gender, birth, age, zodiac, height, weight, hometown, education, 
+        bachelor_school, master_school, doctor_school, income, occupation, workplace, habit, 
+        photo, voice, remarks, fall_in_love, married, is_enabled, create_time, update_time
+    </sql>
+
+    <select id="listAll" resultMap="userInfoMap">
+        select
+        <include refid="Base_Column_List" />
+        from
+        user_info
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="userInfoMap" parameterType="java.lang.String" >
+        select 
+        <include refid="Base_Column_List" />
+        from user_info
+        where user_id = #{userId,jdbcType=CHAR}
+    </select>
+
+    <insert id="insert" parameterType="UserInfo" >
+        insert into user_info (user_id, user_name, gender, 
+            birth, age, zodiac, 
+            height, weight, hometown, 
+            education, bachelor_school, master_school, 
+            doctor_school, income, occupation, 
+            workplace, habit, photo, 
+            voice, remarks, fall_in_love, 
+            married, is_enabled, create_time, 
+            update_time)
+        values (#{userId,jdbcType=CHAR}, #{userName,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
+            #{birth,jdbcType=DATE}, #{age,jdbcType=INTEGER}, #{zodiac,jdbcType=INTEGER}, 
+            #{height,jdbcType=INTEGER}, #{weight,jdbcType=VARCHAR}, #{hometown,jdbcType=VARCHAR}, 
+            #{education,jdbcType=VARCHAR}, #{bachelorSchool,jdbcType=VARCHAR}, #{masterSchool,jdbcType=VARCHAR}, 
+            #{doctorSchool,jdbcType=VARCHAR}, #{income,jdbcType=INTEGER}, #{occupation,jdbcType=INTEGER}, 
+            #{workplace,jdbcType=VARCHAR}, #{habit,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, 
+            #{voice,jdbcType=LONGVARBINARY}, #{remarks,jdbcType=VARCHAR}, #{fallInLove,jdbcType=INTEGER}, 
+            #{married,jdbcType=INTEGER}, 1, now(), now())
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="UserInfo" >
+        update user_info
+        set user_name = #{userName,jdbcType=VARCHAR},
+            gender = #{gender,jdbcType=INTEGER},
+            birth = #{birth,jdbcType=DATE},
+            age = #{age,jdbcType=INTEGER},
+            zodiac = #{zodiac,jdbcType=INTEGER},
+            height = #{height,jdbcType=INTEGER},
+            weight = #{weight,jdbcType=VARCHAR},
+            hometown = #{hometown,jdbcType=VARCHAR},
+            education = #{education,jdbcType=VARCHAR},
+            bachelor_school = #{bachelorSchool,jdbcType=VARCHAR},
+            master_school = #{masterSchool,jdbcType=VARCHAR},
+            doctor_school = #{doctorSchool,jdbcType=VARCHAR},
+            income = #{income,jdbcType=INTEGER},
+            occupation = #{occupation,jdbcType=INTEGER},
+            workplace = #{workplace,jdbcType=VARCHAR},
+            habit = #{habit,jdbcType=VARCHAR},
+            photo = #{photo,jdbcType=VARCHAR},
+            voice = #{voice,jdbcType=LONGVARBINARY},
+            remarks = #{remarks,jdbcType=VARCHAR},
+            fall_in_love = #{fallInLove,jdbcType=INTEGER},
+            married = #{married,jdbcType=INTEGER},
+            update_time = now()
+        where user_id = #{userId,jdbcType=CHAR}
+    </update>
+
+    <update id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        update user_info
+        set is_enabled = 0,
+            update_time = now()
+        where user_id = #{userId,jdbcType=CHAR}
+    </update>
+</mapper>
